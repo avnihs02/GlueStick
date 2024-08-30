@@ -115,6 +115,7 @@ class SuperPoint(BaseModel):
         )
 
         if conf.weights is not None and Path(conf.weights).exists():
+            print("---------------------------SUPERPOINT TF WEIGHTS PATH EXISTS---------------------------------")
             state_dict = torch.load(conf.weights, map_location="cpu")
         else:
             state_dict = torch.hub.load_state_dict_from_url(self.checkpoint_url)
