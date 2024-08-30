@@ -4,7 +4,7 @@ from pytlsd import lsd
 from sklearn.cluster import DBSCAN
 
 from .base_model import BaseModel
-from .superpoint import SuperPoint, sample_descriptors
+from .superpoint_open import SuperPoint, sample_descriptors
 from ..geometry import warp_lines_torch
 
 
