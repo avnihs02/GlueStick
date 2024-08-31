@@ -118,6 +118,7 @@ class SuperPoint(BaseModel):
             print("---------------------------SUPERPOINT TF WEIGHTS PATH EXISTS---------------------------------")
             state_dict = torch.load(conf.weights, map_location="cpu")
         else:
+            print("---------------------------SUPERPOINT TF WEIGHTS FROM URL---------------------------------")
             state_dict = torch.hub.load_state_dict_from_url(self.checkpoint_url)
         self.load_state_dict(state_dict)
 
