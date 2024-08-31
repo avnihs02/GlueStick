@@ -57,7 +57,7 @@ def keep_best_kp_subset(keypoints, scores, descs, num_selected):
 class TwoViewPipeline(BaseModel):
     default_conf = {
         'extractor': {
-            'name': 'superpoint',
+            'name': 'superpoint_open',
             'trainable': False,
         },
         'use_lines': False,
