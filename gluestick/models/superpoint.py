@@ -105,11 +105,11 @@ class SuperPoint(BaseModel):
             self.convDb = nn.Conv2d(
                 c5, conf.descriptor_dim, kernel_size=1, stride=1, padding=0)
 
-        path = GLUESTICK_ROOT / 'resources' / 'weights' / 'superpoint_v6_from_tf.pth'
+        path = GLUESTICK_ROOT / 'resources' / 'weights' / 'superpoint_v1.pth'
         if path.exists():
             weights = torch.load(str(path), map_location='cpu')
         else:
-            weights_url = "https://github.com/cvg/GlueStick/raw/main/resources/weights/superpoint_v6_from_tf.pth"
+            weights_url = "https://github.com/cvg/GlueStick/raw/main/resources/weights/superpoint_v1.pth"
             weights = torch.hub.load_state_dict_from_url(weights_url, map_location='cpu')
         self.load_state_dict(weights, strict=False)
 

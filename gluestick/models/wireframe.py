@@ -4,7 +4,7 @@ from pytlsd import lsd
 from sklearn.cluster import DBSCAN
 
 from .base_model import BaseModel
-from .superpoint_open import SuperPoint, sample_descriptors
+from .superpoint import SuperPoint, sample_descriptors
 from ..geometry import warp_lines_torch
 
 
@@ -184,7 +184,6 @@ class SPWireframeDescriptor(BaseModel):
                 dist_pt_lines < self.conf.sp_params.nms_radius, dim=2)
             # Simply remove them (we assume batch_size = 1 here)
             assert len(kp) == 1
-
             pred['keypoints'] = pred['keypoints'][0][~pts_to_remove[0]][None]
             pred['keypoint_scores'] = pred['keypoint_scores'][0][~pts_to_remove[0]][None]
             pred['descriptors'] = pred['descriptors'][0].T[~pts_to_remove[0]].T[None]
@@ -195,7 +194,7 @@ class SPWireframeDescriptor(BaseModel):
             # Merge first close-by endpoints to connect lines
             (line_points, line_pts_scores, line_descs, line_association,
              lines, lines_junc_idx, num_true_junctions) = lines_to_wireframe(
-                lines, line_scores, pred['dense_descriptors'],
+                lines, line_scores, pred['all_descriptors'],
                 conf=self.conf.wireframe_params)
 
             # Add the keypoints to the junctions and fill the rest with random keypoints
@@ -229,7 +228,7 @@ class SPWireframeDescriptor(BaseModel):
                 torch.repeat_interleave(line_scores, 2, dim=1),
                 pred['keypoint_scores']], dim=1)
             pred['line_descriptors'] = self.endpoints_pooling(
-                lines, pred['dense_descriptors'], (h, w))
+                lines, pred['all_descriptors'], (h, w))
             all_descs = torch.cat([
                 pred['line_descriptors'].reshape(b_size, self.conf.sp_params.descriptor_dim, -1),
                 pred['descriptors']], dim=2)
@@ -239,7 +238,7 @@ class SPWireframeDescriptor(BaseModel):
             lines_junc_idx = torch.arange(
                 num_lines * 2, device=device).reshape(1, -1, 2).repeat(b_size, 1, 1)
 
-        del pred['dense_descriptors']  # Remove dense descriptors to save memory
+        del pred['all_descriptors']  # Remove dense descriptors to save memory
         torch.cuda.empty_cache()
 
         return {'keypoints': all_points,
