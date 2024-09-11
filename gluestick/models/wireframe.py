@@ -184,6 +184,7 @@ class SPWireframeDescriptor(BaseModel):
                 dist_pt_lines < self.conf.sp_params.nms_radius, dim=2)
             # Simply remove them (we assume batch_size = 1 here)
             assert len(kp) == 1
+
             pred['keypoints'] = pred['keypoints'][0][~pts_to_remove[0]][None]
             pred['keypoint_scores'] = pred['keypoint_scores'][0][~pts_to_remove[0]][None]
             pred['descriptors'] = pred['descriptors'][0].T[~pts_to_remove[0]].T[None]
@@ -194,7 +195,7 @@ class SPWireframeDescriptor(BaseModel):
             # Merge first close-by endpoints to connect lines
             (line_points, line_pts_scores, line_descs, line_association,
              lines, lines_junc_idx, num_true_junctions) = lines_to_wireframe(
-                lines, line_scores, pred['all_descriptors'],
+                lines, line_scores, pred['dense_descriptors'],
                 conf=self.conf.wireframe_params)
 
             # Add the keypoints to the junctions and fill the rest with random keypoints

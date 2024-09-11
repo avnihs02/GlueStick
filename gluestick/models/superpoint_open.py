@@ -85,7 +85,7 @@ class SuperPoint(BaseModel):
         "remove_borders": 4,
         "descriptor_dim": 256,
         "channels": [64, 64, 128, 128, 256],
-        "dense_outputs": None,
+        "dense_outputs": True,
         "weights": None,  # local path of pretrained weights
     }
 
@@ -207,7 +207,7 @@ class SuperPoint(BaseModel):
         pred = {
             "keypoints": keypoints + 0.5,
             "keypoint_scores": scores,
-            "descriptors": desc.transpose(-1, -2),
+            "descriptors": desc,
         }
         if self.conf.dense_outputs:
             pred["dense_descriptors"] = descriptors_dense
