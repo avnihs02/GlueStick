@@ -229,7 +229,7 @@ class SPWireframeDescriptor(BaseModel):
                 torch.repeat_interleave(line_scores, 2, dim=1),
                 pred['keypoint_scores']], dim=1)
             pred['line_descriptors'] = self.endpoints_pooling(
-                lines, pred['all_descriptors'], (h, w))
+                lines, pred['dense_descriptors'], (h, w))
             all_descs = torch.cat([
                 pred['line_descriptors'].reshape(b_size, self.conf.sp_params.descriptor_dim, -1),
                 pred['descriptors']], dim=2)
@@ -239,7 +239,7 @@ class SPWireframeDescriptor(BaseModel):
             lines_junc_idx = torch.arange(
                 num_lines * 2, device=device).reshape(1, -1, 2).repeat(b_size, 1, 1)
 
-        del pred['all_descriptors']  # Remove dense descriptors to save memory
+        del pred['dense_descriptors']  # Remove dense descriptors to save memory
         torch.cuda.empty_cache()
 
         return {'keypoints': all_points,
