@@ -187,7 +187,7 @@ class SPWireframeDescriptor(BaseModel):
 
             pred['keypoints'] = pred['keypoints'][0][~pts_to_remove[0]][None]
             pred['keypoint_scores'] = pred['keypoint_scores'][0][~pts_to_remove[0]][None]
-            pred['descriptors'] = pred['descriptors'][0].T[~pts_to_remove[0]].T[None]
+            pred['descriptors'] = pred['descriptors'][0][~pts_to_remove[0]].T[None]
 
         # Connect the lines together to form a wireframe
         orig_lines = lines.clone()

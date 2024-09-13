@@ -81,7 +81,7 @@ class SuperPoint(BaseModel):
         "nms_radius": 4,
         "max_num_keypoints": None,
         "force_num_keypoints": False,
-        "detection_threshold": 0.005,
+        "detection_threshold": 0.01,
         "remove_borders": 4,
         "descriptor_dim": 256,
         "channels": [64, 64, 128, 128, 256],
@@ -207,7 +207,7 @@ class SuperPoint(BaseModel):
         pred = {
             "keypoints": keypoints + 0.5,
             "keypoint_scores": scores,
-            "descriptors": desc,
+            "descriptors": desc.transpose(-1, -2),
         }
         if self.conf.dense_outputs:
             pred["dense_descriptors"] = descriptors_dense
